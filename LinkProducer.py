@@ -6,4 +6,5 @@ class LinkProducer(object):
 
     @abstractmethod
     def get_links(self):
+        """Returns a set of URLs"""
         pass
