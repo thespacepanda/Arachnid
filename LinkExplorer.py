@@ -24,6 +24,7 @@ class LinkExplorer(object):
             except Exception, e:
                 print(sys.exc_info()[:2])
                 yield set()
+                return
             for link in BeautifulSoup(response,
                                       parse_only=SoupStrainer("a", href=True)
                                       ).find_all("a"):
