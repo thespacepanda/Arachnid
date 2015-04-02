@@ -1,20 +1,14 @@
-import LinkExplorer
-import LinkSource
-import RedditBot
+import LinkManager
 
 class Arachnid(object):
     """Arachnid manages the life cycle of the other objects"""
 
     def __init__(self):
-        """Constructs necessary owned objects"""
-        reddit = RedditBot.RedditBot()
-        source = LinkSource.LinkSource([reddit])
-        self.explorer = LinkExplorer.LinkExplorer(source)
+        self._link_manager = LinkManager.LinkManager()
 
     def test(self):
-        for url_set in self.explorer.explore():
-            for url in url_set:
-                print(url)
+        for link in self._link_manager.link_stream():
+            print(link)
 
 if __name__ == "__main__":
     arachnid = Arachnid()

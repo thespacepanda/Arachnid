@@ -1,5 +1,6 @@
 import config
 import httplib2
+import sys
 from bs4 import BeautifulSoup, SoupStrainer
 
 class LinkExplorer(object):
@@ -16,13 +17,13 @@ class LinkExplorer(object):
 
         def delve(current_url, current_depth):
             """Returns all links referenced by the url until current_depth is 0"""
-            print("delve called on url: {}, depth: {}".format(current_url, current_depth))
             self._visited.add(current_url)
             url_links = set([current_url])
             try:
                 status, response = self._http.request(current_url)
-            except httplib2.RelativeURIError:
-                return url_links
+            except Exception, e:
+                print(sys.exc_info()[:2])
+                yield set()
             for link in BeautifulSoup(response,
                                       parse_only=SoupStrainer("a", href=True)
                                       ).find_all("a"):
@@ -30,12 +31,11 @@ class LinkExplorer(object):
                     self._visited.add(link["href"])
                     url_links.add(link["href"])
             if current_depth is 0:
-                return url_links
+                yield url_links
             else:
-                children_urls = set()
                 for url in url_links:
-                    children_urls = children_urls.union(delve(url, current_depth-1))
-                return url_links.union(children_urls)
+                   yield delve(url, current_depth-1)
+                yield url_links
 
         depth = config.page_depth
         for url in self._source.tap():
