@@ -35,9 +35,11 @@ class LinkExplorer(object):
                 yield url_links
             else:
                 for url in url_links:
-                   yield delve(url, current_depth-1)
+                   delve(url, current_depth-1)
                 yield url_links
 
         depth = config.page_depth
         for url in self._source.tap():
-            yield delve(url, depth)
+            for url_set in delve(url, depth):
+                for link in url_set:
+                    yield link
