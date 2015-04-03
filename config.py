@@ -4,3 +4,4 @@ subreddits = [
     "python",
     "learnprogramming"
 ]
+target_filetype = "pdf"
