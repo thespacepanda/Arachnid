@@ -10,7 +10,11 @@ class LinkManager(object):
         source = LinkSource.LinkSource([reddit])
         self._explorer = LinkExplorer.LinkExplorer(source)
 
-    def link_stream(self):
-        """Generates a stream of semi-unique URLs"""
+    def get_links(self):
+        """Returns a set of all new links found"""
+        links = set()
         for url in self._explorer.explore():
-            yield url
+            if url in links:
+                print("NOT UNIQUE!!!")
+            links.add(url)
+        return links
