@@ -1,5 +1,5 @@
 import os
-import urllib2
+from urllib.request import urlopen
 
 def download_urls(url_set):
     """Saves target URLs to disk"""
@@ -8,4 +8,4 @@ def download_urls(url_set):
         if not os.path.isfile(filename):
             print("Writing pdf file - " + filename)
             with open(filename, "wb") as pdf_file:
-                pdf_file.write(urllib2.urlopen(url).read())
+                pdf_file.write(urlopen(url).read())

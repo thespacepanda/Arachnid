@@ -21,7 +21,7 @@ class LinkExplorer(object):
             url_links = set([current_url])
             try:
                 status, response = self._http.request(current_url)
-            except Exception, e:
+            except:
                 print(sys.exc_info()[:2])
                 yield set()
                 return
