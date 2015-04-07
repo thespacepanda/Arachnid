@@ -12,17 +12,14 @@ class Arachnid(object):
     def run_downloader(self):
         print("running downloader...")
         while True:
-            print("getting links...")
-            url_set = self._link_manager.get_links()
-            print("got links")
-            print("filtering for pdfs...")
-            pdf_set = TargetFilter.target_filter(url_set)
-            print("just pdfs now")
-            print("downloading pdfs...")
-            DownloadManager.download_urls(pdf_set)
-            print("sleeping 30 seconds")
-            time.sleep(30)
-            print("done sleeping!")
+            for url in self._link_manager.get_links():
+                try:
+                    print("Current URL: {}".format(url))
+                    if TargetFilter.target_filter(url):
+                        print("{} matches target filter".format(url))
+                        DownloadManager.download_url(url)
+                except:
+                    print("Failed on the current url for some reason")
 
 if __name__ == "__main__":
     arachnid = Arachnid()

@@ -12,9 +12,4 @@ class LinkManager(object):
 
     def get_links(self):
         """Returns a set of all new links found"""
-        links = set()
-        for url in self._explorer.explore():
-            if url in links:
-                print("NOT UNIQUE!!!")
-            links.add(url)
-        return links
+        yield from self._explorer.explore()
