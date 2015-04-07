@@ -5,6 +5,7 @@ class LinkSource(object):
         """LinkSource is initialized with a list of LinkProducers"""
         self._producers = linkProducers
         self._consumed_links = set()
+        self._domains = [producer.domain for producer in self._producers]
 
     def tap(self):
         """Returns a generator which returns links from the producers"""
@@ -16,11 +17,10 @@ class LinkSource(object):
 
     def in_producer_domain(self, url):
         """Takes a url and returns whether or not it belongs to any producer"""
-        domains = [producer.domain for producer in self._producers]
 
         def matches(domain):
             """Takes a domain and returns whether or not the url matches the domain"""
             return domain in url
 
-        applicable = map(matches, domains)
+        applicable = map(matches, self._domains)
         return any(applicable)
