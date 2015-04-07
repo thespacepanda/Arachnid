@@ -23,24 +23,20 @@ class LinkExplorer(object):
                 status, response = self._http.request(current_url)
             except:
                 print(sys.exc_info()[:2])
-                yield from set()
                 return
             for link in BeautifulSoup(response,
                                       parse_only=SoupStrainer("a", href=True)
                                       ).find_all("a"):
-                if link["href"] not in self._visited:
-                    self._visited.add(link["href"])
-                    url_links.add(link["href"])
+                if not self._source.in_producer_domain(link["href"]):
+                    if link["href"] not in self._visited:
+                        self._visited.add(link["href"])
+                        url_links.add(link["href"])
             if current_depth is 0:
-                print("OH MY GOD MY DEPTH IS 0!!!")
                 yield from url_links
-                return
             else:
                 for url in url_links:
-                    for link in delve(url, current_depth-1):
-                        yield link
+                    yield from delve(url, current_depth-1)
                 yield from url_links
-                return
 
         depth = config.page_depth
         for url in self._source.tap():

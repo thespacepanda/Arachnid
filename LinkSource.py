@@ -13,3 +13,14 @@ class LinkSource(object):
                 if link not in self._consumed_links:
                     self._consumed_links.add(link)
                     yield link
+
+    def in_producer_domain(self, url):
+        """Takes a url and returns whether or not it belongs to any producer"""
+        domains = [producer.domain for producer in self._producers]
+
+        def matches(domain):
+            """Takes a domain and returns whether or not the url matches the domain"""
+            return domain in url
+
+        applicable = map(matches, domains)
+        return any(applicable)

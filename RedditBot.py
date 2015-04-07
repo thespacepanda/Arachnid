@@ -11,6 +11,7 @@ class RedditBot(LinkProducer.LinkProducer):
         self.subreddits = []
         for subreddit in config.subreddits:
             self.subreddits.append(self.reddit.get_subreddit(subreddit))
+        super().__init__("reddit.com")
 
     def get_links(self):
         """Lazily returns iterable of URLs from configured subreddits"""
