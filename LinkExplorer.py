@@ -1,7 +1,10 @@
 import config
+import functools
 import httplib2
 import sys
+import util
 from bs4 import BeautifulSoup, SoupStrainer
+from multiprocessing import Pool
 
 class LinkExplorer(object):
     """LinkExplorer crawls over URLs, aggregating links to a specified depth"""
@@ -34,8 +37,10 @@ class LinkExplorer(object):
             if current_depth is 0:
                 yield from url_links
             else:
-                for url in url_links:
-                    yield from delve(url, current_depth-1)
+                with Pool(len(url_links)) as p:
+                    delve_to = util.flip(delve)
+                    delve_to_depth = functools.partial(delve_to, current_depth-1)
+                    yield from p.map(delve_to_depth, url_links)
                 yield from url_links
 
         depth = config.page_depth
