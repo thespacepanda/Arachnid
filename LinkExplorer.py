@@ -4,7 +4,8 @@ import httplib2
 import sys
 import util
 from bs4 import BeautifulSoup, SoupStrainer
-from multiprocessing import Pool
+from multiprocessing.dummy import Pool
+
 
 http = httplib2.Http()
 
