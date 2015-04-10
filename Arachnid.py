@@ -36,6 +36,7 @@ def recursively(until, url):
         return
     except KeyError:
         printing("Tried to access non-http resource")
+        return
     for link in BeautifulSoup(response,
                               parse_only=SoupStrainer("a",
                                                       href=True)
