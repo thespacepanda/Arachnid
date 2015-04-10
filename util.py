@@ -1,8 +1,17 @@
-import functools
+def printing(message):
+    try:
+        print(message)
+    except UnicodeEncodeError:
+        print("Hit a character I could not print!")
 
-def flip(func):
-    "Returns the given function with the argument order reversed"
-    @functools.wraps(func)
-    def newfunc(*args):
-        return func(*args[::-1])
-    return newfunc
+def coroutine(func):
+    def start(*args, **kwargs):
+        cr = func(*args, **kwargs)
+        next(cr)
+        return cr
+    return start
+
+def sending(target, collection):
+    for item in collection:
+        printing("This is {} in {}".format(item, collection))
+        target.send(item)
